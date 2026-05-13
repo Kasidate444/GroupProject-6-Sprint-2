@@ -1,62 +1,91 @@
-/* ═══════════════════════════════════════════════
-   App.jsx  —  Root component / view router
-
-   Manages which of the 4 auth pages is visible
-   using a simple useState string.
-
-   Views:  "signin" | "fan" | "artist" | "forgot"
-═══════════════════════════════════════════════ */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SignIn from "./components/SignIn";
 import FanRegister from "./components/FanRegister";
 import ArtistRegister from "./components/ArtistRegister";
 import ForgotPassword from "./components/ForgotPassword";
 
+// "signin" | "fan" | "artist" | "forgot" | "home"
 export default function App() {
-  // The current auth page shown to the user.
-  // App keeps a single string in state and renders the matching page.
   const [view, setView] = useState("signin");
 
-  // Simple view router: choose which auth screen to render.
-  // Each page receives callbacks that update 'view' to show a different page.
+  useEffect(() => {
+    // Check if user is already logged in
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      try {
+        const user = JSON.parse(userData);
+        if (user.loggedIn) {
+          setView("home");
+        }
+      } catch (e) {
+        // Invalid data, remove it
+        localStorage.removeItem("user");
+      }
+    }
+  }, []);
+
   switch (view) {
     case "fan":
       return (
         <FanRegister
-          // Back to the sign-in page
           onGoSignIn={() => setView("signin")}
-          // Switch to the artist signup page
           onGoArtist={() => setView("artist")}
         />
       );
-
     case "artist":
       return (
         <ArtistRegister
-          // Back to the sign-in page
           onGoSignIn={() => setView("signin")}
-          // Switch to the fan signup page
           onGoFan={() => setView("fan")}
         />
       );
-
     case "forgot":
+      return <ForgotPassword onGoSignIn={() => setView("signin")} />;
+    case "home":
       return (
-        <ForgotPassword
-          // Return to the sign-in page after forgot-password flow
-          onGoSignIn={() => setView("signin")}
-        />
+        <div
+          style={{
+            minHeight: "100vh",
+            background: "#0e0e14",
+            color: "#e8e8f0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontFamily: "DM Sans, sans-serif",
+          }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <h1>Welcome to Kamui Audtlist!</h1>
+            <p>You have successfully signed in.</p>
+            <button
+              onClick={() => {
+                localStorage.removeItem("user");
+                setView("signin");
+              }}
+              style={{
+                padding: "10px 20px",
+                background: "#1e1030",
+                border: "1px solid #5533aa",
+                borderRadius: "10px",
+                color: "#c5b8ff",
+                cursor: "pointer",
+                fontFamily: "Syne, sans-serif",
+                fontSize: "15px",
+                fontWeight: "700",
+              }}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
       );
-
-    default: // "signin"
+    default:
       return (
         <SignIn
-          // Navigate to fan registration
           onGoFan={() => setView("fan")}
-          // Navigate to artist registration
           onGoArtist={() => setView("artist")}
-          // Navigate to forgot password flow
           onGoForgot={() => setView("forgot")}
+          onSignIn={() => setView("home")}
         />
       );
   }

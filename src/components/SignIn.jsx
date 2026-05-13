@@ -1,124 +1,157 @@
-/* ═══════════════════════════════════════════════
-   SignIn.jsx  —  Sign-in page (for everyone)
-
-   Props:
-     onGoFan         () => void   → navigate to Fan register page
-     onGoArtist      () => void   → navigate to Artist register page
-     onGoForgot      () => void   → navigate to Forgot password page
-═══════════════════════════════════════════════ */
-import { kaStyles, Logo, Field } from "./AuthUI";
 import { useState } from "react";
+import "./auth.css";
 
-function validateCredentials(email, password) {
-  const errors = { email: "", password: "" };
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!email.trim()) {
-    errors.email = "Email is required.";
-  } else if (!emailRegex.test(email)) {
-    errors.email = "Enter a valid email address.";
-  }
-
-  if (!password) {
-    errors.password = "Password is required.";
-  } else if (password.length < 8) {
-    errors.password = "Password must be at least 8 characters.";
-  }
-
-  return { isValid: !errors.email && !errors.password, errors };
-}
-
-export default function SignIn({ onGoFan, onGoArtist, onGoForgot }) {
+export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
+  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignIn = () => {
-    const result = validateCredentials(email, password);
-    setErrors(result.errors);
+  const validate = () => {
+    const newErrors = {};
 
-    if (!result.isValid) {
+    if (!email.trim()) {
+      newErrors.email = "Email or username is required.";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required.";
+    } else if (password.trim().length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+
+    return newErrors;
+  };
+
+  const handleSignIn = async () => {
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
 
-    // TODO: replace with your auth handler.
-    console.log("Sign in payload:", { email, password });
+    setErrors({});
+    setIsLoading(true);
+
+    try {
+      // Store only non-sensitive session info — never store passwords client-side.
+      // In a real app, authentication is handled server-side and a session token
+      // (e.g. JWT or cookie) is returned and stored here instead.
+      const sessionData = {
+        email: email.trim(),
+        loggedIn: true,
+        timestamp: new Date().toISOString(),
+      };
+      localStorage.setItem("session", JSON.stringify(sessionData));
+
+      onSignIn();
+    } catch (err) {
+      setErrors({ form: "Something went wrong. Please try again." });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <>
-      {/*
-        Inject the shared auth CSS styles defined in AuthUI.jsx.
-        Every auth page reuses this same theme and style block.
-      */}
-      <style>{kaStyles}</style>
+    <div className="ka-root">
+      {/* Logo */}
+      <div className="ka-logo">
+        <div className="ka-logo__icon">KA</div>
+        <span className="ka-logo__text">Kamui Audtlist</span>
+      </div>
 
-      <div className="ka-root">
-        {/* Shared logo shown at the top of auth screens */}
-        <Logo />
+      <div className="ka-card">
+        <p className="ka-title">Sign in</p>
+        <p className="ka-subtitle">Welcome back</p>
 
-        <div className="ka-card">
-          <p className="ka-title">Sign in</p>
-          <p className="ka-subtitle">Welcome back</p>
+        {/* Form-level error */}
+        {errors.form && (
+          <p className="ka-hint ka-hint--error" style={{ marginBottom: 12 }}>
+            {errors.form}
+          </p>
+        )}
 
-          {/* Username / email input field */}
-          <Field
-            label="Username / email"
-            type="email"
+        {/* Email / username */}
+        <div className="ka-field">
+          <label className="ka-label">Username / email</label>
+          <input
+            className="ka-input"
+            type="text"
             placeholder="you@mail.com"
             value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              setErrors((prev) => ({ ...prev, email: "" }));
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (errors.email) setErrors((prev) => ({ ...prev, email: null }));
             }}
-            hint={errors.email}
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? "email-error" : undefined}
           />
+          {errors.email && (
+            <p id="email-error" className="ka-hint ka-hint--error">
+              {errors.email}
+            </p>
+          )}
+        </div>
 
-          {/* Password field with a "Forgot password" action */}
-          <div className="ka-field">
-            <label className="ka-label">Password</label>
+        {/* Password */}
+        <div className="ka-field">
+          <label className="ka-label">Password</label>
+          <div className="ka-password-field">
             <input
               className="ka-input"
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="••••••••••"
               value={password}
-              onChange={(event) => {
-                setPassword(event.target.value);
-                setErrors((prev) => ({ ...prev, password: "" }));
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (errors.password)
+                  setErrors((prev) => ({ ...prev, password: null }));
               }}
+              aria-invalid={!!errors.password}
+              aria-describedby={errors.password ? "password-error" : undefined}
             />
-            {errors.password && <p className="ka-hint">{errors.password}</p>}
-
-            {/* Clicking this button triggers the onGoForgot callback */}
-            <button className="ka-forgot" onClick={onGoForgot}>
-              Forgot password?
+            <button
+              className="ka-show-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              type="button"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? "🙈" : "👁️"}
             </button>
           </div>
-
-          {/* Primary sign-in button; currently UI only, no form handler attached */}
-          <button
-            className="ka-btn"
-            style={{ marginTop: 8 }}
-            type="button"
-            onClick={handleSignIn}
-          >
-            Sign in
+          {/* Only show hint when there's an actual error, not unconditionally */}
+          {errors.password && (
+            <p id="password-error" className="ka-hint ka-hint--error">
+              {errors.password}
+            </p>
+          )}
+          <button className="ka-forgot" onClick={onGoForgot}>
+            Forgot password?
           </button>
-
-          {/* Links that navigate the user to the appropriate register pages */}
-          <div className="ka-footer">
-            Don't have an account? <a onClick={onGoFan}>Sign up as a fan</a> or{" "}
-            <a onClick={onGoArtist}>an artist</a>
-          </div>
-
-          {/* reCAPTCHA notice shown below the main card */}
-          <p className="ka-notice">
-            This site is protected by reCAPTCHA and the Google{" "}
-            <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>{" "}
-            apply.
-          </p>
         </div>
+
+        <button
+          className="ka-btn"
+          style={{ marginTop: 8 }}
+          onClick={handleSignIn}
+          disabled={isLoading}
+          aria-busy={isLoading}
+        >
+          {isLoading ? "Signing in…" : "Sign in"}
+        </button>
+
+        <div className="ka-footer">
+          Don't have an account? <a onClick={onGoFan}>Sign up as a fan</a> or{" "}
+          <a onClick={onGoArtist}>an artist</a>
+        </div>
+
+        <p className="ka-notice">
+          This site is protected by reCAPTCHA and the Google{" "}
+          <a href="#">Privacy Policy</a> and <a href="#">Terms of Service</a>{" "}
+          apply.
+        </p>
       </div>
-    </>
+    </div>
   );
 }
