@@ -1,64 +1,92 @@
-/* ═══════════════════════════════════════════════
-   ArtistRegister.jsx  —  Registration for artists
-
-   Props:
-     onGoSignIn  () => void   → Sign in page
-     onGoFan     () => void   → Fan register
-═══════════════════════════════════════════════ */
-import { kaStyles, Logo, Field, TermsCheckbox, RegisterTabs } from "./AuthUI";
+import "./auth.css";
 
 export default function ArtistRegister({ onGoSignIn, onGoFan }) {
   return (
-    <>
-      {/* Shared auth page styling injected from AuthUI.jsx */}
-      <style>{kaStyles}</style>
-      <div className="ka-root">
-        <Logo />
+    <div className="ka-root">
+      {/* Logo */}
+      <div className="ka-logo">
+        <div className="ka-logo__icon">KA</div>
+        <span className="ka-logo__text">Kamui Audtlist</span>
+      </div>
 
-        <div className="ka-card">
-          <p className="ka-title">Create your account</p>
-          <p className="ka-subtitle">
-            Join as an artist and start sharing your music
-          </p>
+      <div className="ka-card">
+        <p className="ka-title">Create your account</p>
+        <p className="ka-subtitle">
+          Join as an artist and start sharing your music
+        </p>
 
-          {/*
-            Tab switcher between Fan and Artist registration.
-            active="artist" highlights the current artist tab.
-          */}
-          <RegisterTabs active="artist" onFan={onGoFan} onArtist={() => {}} />
+        {/* Fan / Artist tabs */}
+        <div className="ka-tabs">
+          <button className="ka-tab" onClick={onGoFan}>
+            Fan
+          </button>
+          <button className="ka-tab ka-tab--active">Artist</button>
+        </div>
 
-          {/* Artist name field for band or stage name. */}
-          <Field label="Artist / Band Name" placeholder="e.g. The Midnight" />
+        {/* Artist / Band name */}
+        <div className="ka-field">
+          <label className="ka-label">Artist / Band Name</label>
+          <input
+            className="ka-input"
+            type="text"
+            placeholder="e.g. The Midnight"
+          />
+        </div>
 
-          {/* Username and email fields shown in one row. */}
-          <div className="ka-row">
-            <Field label="Username" placeholder="@handle" />
-            <Field label="Email" type="email" placeholder="you@mail.com" />
+        {/* Username & email */}
+        <div className="ka-row">
+          <div className="ka-field">
+            <label className="ka-label">Username</label>
+            <input className="ka-input" type="text" placeholder="@handle" />
           </div>
+          <div className="ka-field">
+            <label className="ka-label">Email</label>
+            <input
+              className="ka-input"
+              type="email"
+              placeholder="you@mail.com"
+            />
+          </div>
+        </div>
 
-          {/* Password and confirmation inputs in a two-column layout. */}
-          <div className="ka-row">
-            <Field label="Password" type="password" placeholder="••••••••••" />
-            <Field
-              label="Confirm password"
+        {/* Password */}
+        <div className="ka-row">
+          <div className="ka-field">
+            <label className="ka-label">Password</label>
+            <input
+              className="ka-input"
               type="password"
               placeholder="••••••••••"
             />
           </div>
-
-          {/* Terms agreement checkbox shared by registration pages. */}
-          <TermsCheckbox id="artist-terms" />
-
-          {/* The register button is present as UI only and has no submit handler yet. */}
-          <button className="ka-btn">Register</button>
-
-          <div className="ka-footer">
-            Already have an account? <a onClick={onGoSignIn}>Log in</a>
-            <br />
-            Not an artist? <a onClick={onGoFan}>Sign up for a fan account</a>
+          <div className="ka-field">
+            <label className="ka-label">Confirm password</label>
+            <input
+              className="ka-input"
+              type="password"
+              placeholder="••••••••••"
+            />
           </div>
         </div>
+        <p className="ka-hint ka-hint--error">8 characters minimum.</p>
+
+        {/* Terms */}
+        <div className="ka-check">
+          <input type="checkbox" className="ka-checkbox" id="artist-terms" />
+          <label htmlFor="artist-terms" className="ka-check__label">
+            I have read and agree to the <a href="#">Terms of Use</a> and{" "}
+            <a href="#">Privacy Policy</a>
+          </label>
+        </div>
+
+        <button className="ka-btn">Register</button>
+
+        <div className="ka-footer">
+          Already have an account? <a onClick={onGoSignIn}>Log in</a>
+          <br />
+          Not an artist? <a onClick={onGoFan}>Sign up for a fan account</a>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

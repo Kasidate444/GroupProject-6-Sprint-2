@@ -1,0 +1,350 @@
+/* ═══════════════════════════════════════════════════════
+   auth.css
+   Styles shared across all auth pages:
+   SignIn, FanRegister, ArtistRegister, ForgotPassword
+═══════════════════════════════════════════════════════ */
+
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap");
+
+/* ── Page wrapper ──────────────────────────────────── */
+
+.ka-root {
+  font-family: "DM Sans", sans-serif;
+  min-height: 100vh;
+  background: #0e0e14;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative;
+}
+
+.ka-root::before {
+  content: "";
+  position: fixed;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 500px;
+  background: radial-gradient(
+    circle,
+    rgba(130, 80, 255, 0.1) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Logo ──────────────────────────────────────────── */
+
+.ka-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  z-index: 1;
+}
+
+.ka-logo__icon {
+  width: 40px;
+  height: 40px;
+  background: #1e1e2e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Syne", sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: #ccc;
+  letter-spacing: -0.5px;
+}
+
+.ka-logo__text {
+  font-family: "Syne", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #e8e8f0;
+  letter-spacing: -0.3px;
+}
+
+/* ── Card ──────────────────────────────────────────── */
+
+.ka-card {
+  background: #16161f;
+  border: 0.5px solid #2a2a3a;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 400px;
+  z-index: 1;
+}
+
+/* ── Headings ──────────────────────────────────────── */
+
+.ka-title {
+  font-family: "Syne", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0f0fa;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.ka-subtitle {
+  font-size: 13px;
+  color: #666;
+  text-align: center;
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+/* ── Register tabs (Fan / Artist) ──────────────────── */
+
+.ka-tabs {
+  display: flex;
+  background: #0e0e14;
+  border: 0.5px solid #2a2a3a;
+  border-radius: 10px;
+  padding: 3px;
+  margin-bottom: 24px;
+}
+
+.ka-tab {
+  flex: 1;
+  padding: 8px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #555;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.ka-tab--active {
+  background: #23233a;
+  color: #c5b8ff;
+}
+
+/* ── Form fields ───────────────────────────────────── */
+
+.ka-field {
+  margin-bottom: 16px;
+}
+
+.ka-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #888;
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+.ka-input {
+  width: 100%;
+  padding: 10px 40px 10px 14px;
+  background: #0e0e14;
+  border: 0.5px solid #2a2a3a;
+  border-radius: 8px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  color: #e8e8f0;
+  outline: none;
+  transition: border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.ka-input::placeholder {
+  color: #444;
+}
+
+.ka-input:focus {
+  border-color: #6644cc;
+}
+
+.ka-password-field {
+  position: relative;
+}
+
+.ka-show-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ka-show-btn:hover {
+  color: #aaa;
+}
+
+.ka-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ka-hint {
+  font-size: 11px;
+  color: #555;
+  margin-top: 4px;
+}
+
+.ka-hint--error {
+  color: #ff6b6b;
+}
+
+/* ── Terms checkbox ────────────────────────────────── */
+
+.ka-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 20px;
+}
+
+.ka-checkbox {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  background: #0e0e14;
+  border: 1.5px solid #333;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: 1px;
+  accent-color: #6644cc;
+}
+
+.ka-check__label {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.ka-check__label a {
+  color: #9977ee;
+  text-decoration: none;
+}
+
+/* ── Primary button ────────────────────────────────── */
+
+.ka-btn {
+  width: 100%;
+  padding: 12px;
+  background: #1e1030;
+  border: 1px solid #5533aa;
+  border-radius: 10px;
+  font-family: "Syne", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #c5b8ff;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    transform 0.1s;
+  letter-spacing: 0.2px;
+}
+
+.ka-btn:hover {
+  background: #2a1845;
+}
+
+.ka-btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Footer navigation links ───────────────────────── */
+
+.ka-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.9;
+}
+
+.ka-footer a {
+  color: #9977ee;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ka-footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── Forgot password inline link ───────────────────── */
+
+.ka-forgot {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: #9977ee;
+  margin-top: 4px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: "DM Sans", sans-serif;
+}
+
+/* ── reCAPTCHA notice ──────────────────────────────── */
+
+.ka-notice {
+  font-size: 11px;
+  color: #555;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.ka-notice a {
+  color: #666;
+  text-decoration: none;
+}
+
+/* ── Forgot password success box ───────────────────── */
+
+.ka-success {
+  background: #0e1a0e;
+  border: 0.5px solid #2a4a2a;
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ka-success__icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.ka-success__title {
+  font-family: "Syne", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #6abf6a;
+  margin-bottom: 4px;
+}
+
+.ka-success__text {
+  font-size: 12px;
+  color: #558855;
+  line-height: 1.5;
+}
