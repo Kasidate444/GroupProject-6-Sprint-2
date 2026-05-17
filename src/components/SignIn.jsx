@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./auth.css";
+import { FaEye } from "react-icons/fa6";
+import { FaEyeSlash } from "react-icons/fa6";
 
 export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -117,7 +119,7 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
               type="button"
               aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? "🙈" : "👁️"}
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
           </div>
           {/* Only show hint when there's an actual error, not unconditionally */}
