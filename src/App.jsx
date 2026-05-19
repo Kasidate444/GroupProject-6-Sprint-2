@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import SignIn from "./components/SignIn";
+import LogIn from "./components/LogIn";
 import FanRegister from "./components/FanRegister";
 import ArtistRegister from "./components/ArtistRegister";
 import ForgotPassword from "./components/ForgotPassword";
 
-// "signin" | "fan" | "artist" | "forgot" | "home"
+// "login" | "fan" | "artist" | "forgot" | "home"
 export default function App() {
-  const [view, setView] = useState("signin");
+  const [view, setView] = useState("login");
 
   useEffect(() => {
     // Check if user is already logged in
@@ -28,19 +28,19 @@ export default function App() {
     case "fan":
       return (
         <FanRegister
-          onGoSignIn={() => setView("signin")}
+          onGoLogIn={() => setView("login")}
           onGoArtist={() => setView("artist")}
         />
       );
     case "artist":
       return (
         <ArtistRegister
-          onGoSignIn={() => setView("signin")}
+          onGoLogIn={() => setView("login")}
           onGoFan={() => setView("fan")}
         />
       );
     case "forgot":
-      return <ForgotPassword onGoSignIn={() => setView("signin")} />;
+      return <ForgotPassword onGoLogIn={() => setView("login")} />;
     case "home":
       return (
         <div
@@ -56,11 +56,11 @@ export default function App() {
         >
           <div style={{ textAlign: "center" }}>
             <h1>Welcome to Kamui Audtlist!</h1>
-            <p>You have successfully signed in.</p>
+            <p>You have successfully loged in.</p>
             <button
               onClick={() => {
                 localStorage.removeItem("user");
-                setView("signin");
+                setView("login");
               }}
               style={{
                 padding: "10px 20px",
@@ -74,18 +74,18 @@ export default function App() {
                 fontWeight: "700",
               }}
             >
-              Sign Out
+              Log Out
             </button>
           </div>
         </div>
       );
     default:
       return (
-        <SignIn
+        <LogIn
           onGoFan={() => setView("fan")}
           onGoArtist={() => setView("artist")}
           onGoForgot={() => setView("forgot")}
-          onSignIn={() => setView("home")}
+          onLogIn={() => setView("home")}
         />
       );
   }

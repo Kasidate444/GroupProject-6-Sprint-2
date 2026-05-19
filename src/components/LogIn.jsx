@@ -3,7 +3,7 @@ import "./auth.css";
 import { FaEye } from "react-icons/fa6";
 import { FaEyeSlash } from "react-icons/fa6";
 
-export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
+export default function LogIn({ onGoFan, onGoArtist, onGoForgot, onLogIn }) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,7 +14,9 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
     const newErrors = {};
 
     if (!email.trim()) {
-      newErrors.email = "Email or username is required.";
+      newErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      newErrors.email = "Enter a valid email address.";
     }
 
     if (!password.trim()) {
@@ -26,7 +28,7 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
     return newErrors;
   };
 
-  const handleSignIn = async () => {
+  const handleLogIn = async () => {
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -47,7 +49,7 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
       };
       localStorage.setItem("session", JSON.stringify(sessionData));
 
-      onSignIn();
+      onLogIn();
     } catch (err) {
       setErrors({ form: "Something went wrong. Please try again." });
     } finally {
@@ -59,12 +61,12 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
     <div className="ka-root">
       {/* Logo */}
       <div className="ka-logo">
-        <div className="ka-logo__icon">KA</div>
-        <span className="ka-logo__text">Kamui Audtlist</span>
+        <div className="ka-logo__icon">▽</div>
+        <span className="ka-logo__text">AUDTLIST</span>
       </div>
 
       <div className="ka-card">
-        <p className="ka-title">Sign in</p>
+        <p className="ka-title">Log in</p>
         <p className="ka-subtitle">Welcome back</p>
 
         {/* Form-level error */}
@@ -74,13 +76,15 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
           </p>
         )}
 
-        {/* Email / username */}
+        {/* Email */}
         <div className="ka-field">
-          <label className="ka-label">Username / email</label>
+          <label className="ka-label">Email</label>
           <input
             className="ka-input"
-            type="text"
+            type="email"
+            name="email"
             placeholder="you@mail.com"
+            autoComplete="email"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
@@ -136,11 +140,11 @@ export default function SignIn({ onGoFan, onGoArtist, onGoForgot, onSignIn }) {
         <button
           className="ka-btn"
           style={{ marginTop: 8 }}
-          onClick={handleSignIn}
+          onClick={handleLogIn}
           disabled={isLoading}
           aria-busy={isLoading}
         >
-          {isLoading ? "Signing in…" : "Sign in"}
+          {isLoading ? "Logging in…" : "Log in"}
         </button>
 
         <div className="ka-footer">

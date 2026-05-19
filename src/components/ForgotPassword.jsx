@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./auth.css";
 
-export default function ForgotPassword({ onGoSignIn }) {
+export default function ForgotPassword({ onGoLogIn }) {
   // "request" = email form  |  "sent" = confirmation screen
   const [step, setStep] = useState("request");
 
@@ -9,8 +9,8 @@ export default function ForgotPassword({ onGoSignIn }) {
     <div className="ka-root">
       {/* Logo */}
       <div className="ka-logo">
-        <div className="ka-logo__icon">KA</div>
-        <span className="ka-logo__text">Kamui Audtlist</span>
+        <div className="ka-logo__icon">▽</div>
+        <span className="ka-logo__text">Audtlist</span>
       </div>
 
       <div className="ka-card">
@@ -23,11 +23,19 @@ export default function ForgotPassword({ onGoSignIn }) {
             </p>
 
             <div className="ka-field">
-              <label className="ka-label">Email</label>
+              <label className="ka-label" htmlFor="reset-email">
+                Email
+              </label>
               <input
+                id="reset-email"
                 className="ka-input"
                 type="email"
+                name="email"
                 placeholder="you@mail.com"
+                pattern={"[^\\s@]+@[^\\s@]+\\.[^\\s@]+"}
+                title="Enter a valid email address, like you@mail.com."
+                autoComplete="email"
+                required
               />
             </div>
 
@@ -40,7 +48,7 @@ export default function ForgotPassword({ onGoSignIn }) {
             </button>
 
             <div className="ka-footer">
-              <a onClick={onGoSignIn}>← Back to sign in</a>
+              <a onClick={onGoLogIn}>← Back to log in</a>
             </div>
           </>
         )}
@@ -62,8 +70,8 @@ export default function ForgotPassword({ onGoSignIn }) {
               </p>
             </div>
 
-            <button className="ka-btn" onClick={onGoSignIn}>
-              Back to sign in
+            <button className="ka-btn" onClick={onGoLogIn}>
+              Back to log in
             </button>
 
             <div className="ka-footer">
