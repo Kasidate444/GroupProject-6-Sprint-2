@@ -1,8 +1,10 @@
 import { useState } from "react";
+import ArtistGenreSelect from "./ArtistGenreSelect";
 import "./auth.css";
 
 const initialForm = {
   artistName: "",
+  genre: "",
   username: "",
   email: "",
   password: "",
@@ -29,6 +31,10 @@ export default function ArtistRegister({ onGoLogIn, onGoFan }) {
 
     if (!form.artistName.trim()) {
       nextErrors.artistName = "Artist or band name is required.";
+    }
+
+    if (!form.genre) {
+      nextErrors.genre = "Artist genre is required.";
     }
 
     if (!form.username.trim()) {
@@ -130,6 +136,12 @@ export default function ArtistRegister({ onGoLogIn, onGoFan }) {
             </p>
           )}
         </div>
+
+        <ArtistGenreSelect
+          value={form.genre}
+          error={errors.genre}
+          onChange={(value) => updateField("genre", value)}
+        />
 
         <div className="ka-row">
           <div className="ka-field">
