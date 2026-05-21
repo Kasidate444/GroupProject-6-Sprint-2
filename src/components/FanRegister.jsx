@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./auth.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const initialForm = {
   email: "",
@@ -14,6 +15,8 @@ export default function FanRegister({ onGoLogIn, onGoArtist }) {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const updateField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }));
@@ -77,7 +80,7 @@ export default function FanRegister({ onGoLogIn, onGoArtist }) {
     <div className="ka-root">
       <div className="ka-logo">
         <div className="ka-logo__icon">▽</div>
-        <span className="ka-logo__text">Audtlist</span>
+        <span className="ka-logo__text">AUDTLIST</span>
       </div>
 
       <form className="ka-card" onSubmit={handleSubmit} noValidate>
@@ -182,21 +185,34 @@ export default function FanRegister({ onGoLogIn, onGoArtist }) {
             <label className="ka-label" htmlFor="fan-password">
               Password
             </label>
-            <input
-              id="fan-password"
-              className="ka-input"
-              type="password"
-              name="new-password"
-              autoComplete="new-password"
-              value={form.password}
-              onChange={(event) => updateField("password", event.target.value)}
-              aria-invalid={!!errors.password}
-              aria-describedby={
-                errors.password ? "fan-password-error" : "fan-password-hint"
-              }
-              minLength={8}
-              required
-            />
+            <div className="ka-password-field">
+              <input
+                id="fan-password"
+                className="ka-input"
+                type={showPassword ? "text" : "password"}
+                name="new-password"
+                placeholder="••••••••••"
+                autoComplete="new-password"
+                value={form.password}
+                onChange={(event) =>
+                  updateField("password", event.target.value)
+                }
+                aria-invalid={!!errors.password}
+                aria-describedby={
+                  errors.password ? "fan-password-error" : "fan-password-hint"
+                }
+                minLength={8}
+                required
+              />
+              <button
+                className="ka-show-btn"
+                onClick={() => setShowPassword((current) => !current)}
+                type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {errors.password ? (
               <p id="fan-password-error" className="ka-hint ka-hint--error">
                 {errors.password}
@@ -212,24 +228,39 @@ export default function FanRegister({ onGoLogIn, onGoArtist }) {
             <label className="ka-label" htmlFor="fan-confirm-password">
               Confirm password
             </label>
-            <input
-              id="fan-confirm-password"
-              className="ka-input"
-              type="password"
-              name="confirm-password"
-              autoComplete="new-password"
-              value={form.confirmPassword}
-              onChange={(event) =>
-                updateField("confirmPassword", event.target.value)
-              }
-              aria-invalid={!!errors.confirmPassword}
-              aria-describedby={
-                errors.confirmPassword
-                  ? "fan-confirm-password-error"
-                  : undefined
-              }
-              required
-            />
+            <div className="ka-password-field">
+              <input
+                id="fan-confirm-password"
+                className="ka-input"
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirm-password"
+                placeholder="••••••••••"
+                autoComplete="new-password"
+                value={form.confirmPassword}
+                onChange={(event) =>
+                  updateField("confirmPassword", event.target.value)
+                }
+                aria-invalid={!!errors.confirmPassword}
+                aria-describedby={
+                  errors.confirmPassword
+                    ? "fan-confirm-password-error"
+                    : undefined
+                }
+                required
+              />
+              <button
+                className="ka-show-btn"
+                onClick={() => setShowConfirmPassword((current) => !current)}
+                type="button"
+                aria-label={
+                  showConfirmPassword
+                    ? "Hide confirm password"
+                    : "Show confirm password"
+                }
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
             {errors.confirmPassword && (
               <p
                 id="fan-confirm-password-error"
